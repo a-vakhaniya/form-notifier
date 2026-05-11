@@ -1,0 +1,210 @@
+{
+  "name": "massash-form → Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "massash-form",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7001aa2f-26ac-48bd-a697-b03c23f8c25a",
+      "name": "Webhook",
+      "webhookId": "4c5c1b45-03e8-46fd-aad5-8e27e396b551"
+    },
+    {
+      "parameters": {
+        "chatId": "585251635",
+        "text": "=🔔 Новая заявка с massash.com  👤 Имя: {{ $json.body.name }} 📞 Телефон: {{ $json.body.phone }} 💆 Направление: {{ $json.body.service }} 💬 Сообщение: {{ $json.body.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7aff0601-0c26-428e-af2a-e5e23024b70f",
+      "name": "Send a text message",
+      "webhookId": "ae3f1ebf-110f-4f22-918f-cc4a36974456",
+      "credentials": {
+        "telegramApi": {
+          "id": "aEsf9DyGgLuHESWo",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1z_Zv5qOHRg3y5azIJN6Q64xfGtsc9lMQGGWW5OXys-E",
+          "mode": "list",
+          "cachedResultName": "Заявки massash.com",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1z_Zv5qOHRg3y5azIJN6Q64xfGtsc9lMQGGWW5OXys-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1z_Zv5qOHRg3y5azIJN6Q64xfGtsc9lMQGGWW5OXys-E/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Дата": "={{ $now.toFormat('dd.MM.yyyy HH:mm') }}",
+            "Имя ": "={{ $('Webhook').item.json.body.name }}",
+            "Направление ": "={{ $('Webhook').item.json.body.service }}",
+            "Сообщение": "={{ $('Webhook').item.json.body.message }}",
+            "Телефон ": "=={{ $('Webhook').item.json.body.phone.slice(1) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Имя ",
+              "displayName": "Имя ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Телефон ",
+              "displayName": "Телефон ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Направление ",
+              "displayName": "Направление ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сообщение",
+              "displayName": "Сообщение",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "RAW",
+          "locationDefine": {
+            "values": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "b635d193-dbd4-4206-ab38-d8538108b374",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QqJspA21P2fEtboG",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n.ezi.ru",
+            "x-real-ip": "78.17.36.105",
+            "x-forwarded-for": "78.17.36.105",
+            "x-forwarded-proto": "https",
+            "content-length": "126",
+            "user-agent": "curl/7.81.0",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "Тест Тестов",
+            "phone": "+7 999 123-45-67",
+            "service": "Массаж",
+            "message": "Тестовая заявка"
+          },
+          "webhookUrl": "https://n8n.ezi.ru/webhook/massash-form",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a12761e6-30f3-4e17-95ee-04b00fab3d4a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d43734fb33af58460c11a89753077006f4a025a552e831b10ae656dfcb78f6d5"
+  },
+  "id": "dwLUpvBsyR1g7pPR",
+  "tags": []
+}
